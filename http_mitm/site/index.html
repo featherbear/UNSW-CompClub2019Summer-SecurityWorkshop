@@ -1,0 +1,224 @@
+<html>
+<script>
+  const httpsPort = 8443;
+</script>
+
+<head>
+  <script type="text/javascript" src="./assets/js/md5.js"></script>
+  <link rel="stylesheet" href="./assets/css/normalize.min.css">
+  <link rel="stylesheet" href="./assets/css/bulma.min.css">
+  <script type="text/javascript" src="./assets/js/bulma-steps.min.js"></script>
+  <link rel="stylesheet" href="./assets/css/bulma-steps.min.css">
+  <script type="text/javascript" src="./assets/js/bulma-accordion.min.js"></script>
+  <link rel="stylesheet" href="./assets/css/bulma-accordion.min.css">
+  <title>HTTP(S) / MITM Demo</title>
+  <style>
+    #container {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <div class="container">
+      <script>
+        const login = function(address, data, callback) {
+          return fetch(address, {
+            method: "post",
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json"}
+            }
+          )
+           .then(response => response.json())
+           .then(response => callback(response))
+        }
+      </script>
+      <div class="steps" id="stepsDemo">
+        <div class="step-item is-active">
+          <div class="step-marker"></div>
+          <div class="step-details">
+            <p class="step-title">Start</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-marker"></div>
+          <div class="step-details">
+            <p class="step-title">Plain</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-marker"></div>
+          <div class="step-details">
+            <p class="step-title">Hash</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-marker"></div>
+          <div class="step-details">
+            <p class="step-title"></p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-marker"></div>
+          <div class="step-details">
+            <p class="step-title">HTTPS</p>
+          </div>
+        </div>
+        <div class="steps-content">
+          <div class="step-content has-text-centered is-active">
+            <h1 class="title is-4">HTTP(S) / MITM Demo<br><br>Press Next to continue</h1>
+          </div>
+          <div class="step-content has-text-centered">
+            <h1 class="title">Login One - Plain Text</h1>
+            <form id="login_plain">
+              <div class="field">
+                <div class="label">Username</div>
+                <div class="control"><input class="input has-text-centered" type="text" placeholder="Username" name="username"></div>
+              </div>
+              <div class="field">
+                <div class="label">Password</div>
+                <div class="control"><input class="input has-text-centered" type="password_" placeholder="Password" name="password"></div>
+              </div><input type="submit" class="button">
+            </form>
+            <script>
+              document.getElementById('login_plain').addEventListener('submit', function (evt) {
+                evt.preventDefault();
+                login("/login_plain", {
+                  username: this.username.value,
+                  password: this.password.value
+                }, function(response) {
+                  alert(response.status)
+                })
+              })
+            </script>
+            <section class="accordions">
+              <article class="accordion">
+                <div class="accordion-header toggle has-background-primary">
+                  <p>Notes</p>
+                </div>
+                <div class="accordion-body">
+                  <div class="accordion-content">When we press Submit, our username and password is transmitted <b>over the network</b> to the server. But this network can be home to scary and malicious things...<br>Lucky we're not <strike>hackers</strike> bad people or anything, but security enthusiasts!<br><br>Have a look at what the browser's <u>Developer Console</u> shows (Network tab), or maybe Wireshark / Fiddler?</div>
+                </div>
+              </article>
+            </section>
+          </div>
+          <div class="step-content has-text-centered">
+            <h1 class="title">Login Two - Client Hash</h1>
+            <form id="login_clientHash">
+              <div class="field">
+                <div class="label">Username</div>
+                <div class="control"><input class="input has-text-centered" type="text" placeholder="Username" name="username"></div>
+              </div>
+              <div class="field">
+                <div class="label">Password</div>
+                <div class="control"><input class="input has-text-centered" type="password_" placeholder="Password" name="password"></div>
+              </div><input type="submit" class="button">
+            </form>
+            <script>
+              document.getElementById('login_clientHash').addEventListener('submit', function (evt) {
+                evt.preventDefault();
+                login("/login_clientHash", {
+                  username: this.username.value,
+                  password: md5(this.password.value)
+                }, function(response) {
+                  alert(response.status)
+                })
+              })
+            </script>
+            <section class="accordions">
+              <article class="accordion">
+                <div class="accordion-header toggle has-background-primary">
+                  <p>Notes</p>
+                </div>
+                <div class="accordion-body">
+                  <div class="accordion-content">Hold up! What if we <b>encrypt</b> our password?<br>Therefore no one will be able see what our password was!<br><br><br><i>right...?</i></div>
+                </div>
+              </article>
+            </section>
+          </div>
+          <div class="step-content has-text-centered">
+            <h1 class="title">Login Three - Client Hash Breaker</h1>
+            <form id="login_clientHash_breaker">
+              <div class="field">
+                <div class="label">Username</div>
+                <div class="control"><input class="input has-text-centered" type="text" placeholder="Username" name="username"></div>
+              </div>
+              <div class="field">
+                <div class="label">Password Hash</div>
+                <div class="control"><input class="input has-text-centered" type="password_" placeholder="Password Hash" name="password"></div>
+              </div><input type="submit" class="button">
+            </form>
+            <script>
+              document.getElementById('login_clientHash_breaker').addEventListener('submit', function (evt) {
+                evt.preventDefault();
+                login("/login_clientHash", {
+                  username: this.username.value,
+                  password: this.password.value
+                }, function(response) {
+                  alert(response.status)
+                })
+              })
+            </script>
+            <section class="accordions">
+              <article class="accordion">
+                <div class="accordion-header toggle has-background-primary">
+                  <p>Notes</p>
+                </div>
+                <div class="accordion-body">
+                  <div class="accordion-content">Hold up! What if we <b>encrypt</b> our password?<br>Therefore no one will be able see what our password was!<br><br><br>The issue behind this is that <b>even</b> if we encrypt our password,<br> whilst a <strike>hacker</strike> bad person might not be able to decrypt the password... they won't need to.<br><br>This encrypted password (<i>eg. cGFzc3dvcmQxMjM=</i>) <b>becomes</b> the password</div>
+                </div>
+              </article>
+            </section>
+          </div>
+          <div class="step-content has-text-centered">
+            <h1 class="title">Login Four - Hashed login over HTTPS</h1>
+            <form id="login_serverHash">
+              <div class="field">
+                <div class="label">Username</div>
+                <div class="control"><input class="input has-text-centered" type="text" placeholder="Username" name="username"></div>
+              </div>
+              <div class="field">
+                <div class="label">Password</div>
+                <div class="control"><input class="input has-text-centered" type="password_" placeholder="Password" name="password"></div>
+              </div><input type="submit" class="button">
+            </form>
+            <script>
+              document.getElementById('login_serverHash').addEventListener('submit', function(evt) {
+                evt.preventDefault();
+                login(`https://${location.hostname}:${httpsPort}/login_clientHash`, {
+                  username: this.username.value,
+                  password: md5(this.password.value)
+                }, function(response) {
+                  alert(response.status)
+                })
+              })
+            </script>
+            <section class="accordions">
+              <article class="accordion">
+                <div class="accordion-header toggle has-background-primary">
+                  <p>Notes</p>
+                </div>
+                <div class="accordion-body">
+                  <div class="accordion-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum <a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.</div>
+                </div>
+              </article>
+            </section>
+          </div>
+        </div>
+        <div class="steps-actions">
+          <div class="steps-action"><a href="#" data-nav="previous" class="button is-light">Previous</a></div>
+          <div class="steps-action"><a href="#" data-nav="next" class="button is-light">Next</a></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      bulmaSteps.attach();
+      bulmaAccordion.attach();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "http-https-mitm-demo",
+  "version": "1.0.0",
+  "description": "This demo explores the importance of HTTPS when dealing with confidential data in website.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "featherbear",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "md5": "^2.2.1"
+  }
+}
