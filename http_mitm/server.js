@@ -14,7 +14,7 @@ Object.keys(superSecretCredentials).forEach(function(key) {
 
 console.log('Super secret logon details are:')
 console.log('-------------------------------')
-Object.keys(superSecretCredentials).forEach(key => console.log(`Username:\t${key}\nPlain Text:\t${superSecretCredentials[key]}\nPassword Hash:\t${superSecretCredentials_hashed[key]}\n`))
+Object.keys(superSecretCredentials).forEach(key => console.log(`Username:\t${key}\nPlain Text:\t${key === "andrew" ? "[hidden]" : superSecretCredentials[key]}\nPassword Hash:\t${superSecretCredentials_hashed[key]}\n`))
 console.log('-------------------------------')
 
 
