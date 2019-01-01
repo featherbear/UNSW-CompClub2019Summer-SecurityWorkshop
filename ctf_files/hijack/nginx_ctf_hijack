@@ -1,0 +1,9 @@
+server {
+    listen 172.31.4.9:19385;
+    index index.html;
+    location /view {
+        root /opt/ctf/hijack/site;
+        auth_basic           "u haz creds?";
+        auth_basic_user_file /opt/ctf/hijack/.passwd;
+    }
+}

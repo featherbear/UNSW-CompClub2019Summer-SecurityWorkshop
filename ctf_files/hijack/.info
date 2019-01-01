@@ -1,0 +1,2 @@
+This flag involves analysing the network packet log, and finding an insecure HTTP Basic authentication to the address 54.66.158.5:19385/view
+Upon using the username and password extracted from the HTTP Basic Auth, the user will successfully retrieve the flag
