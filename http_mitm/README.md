@@ -1,9 +1,11 @@
-# HTTP(S) / MITM Demo
+# HTTP vs HTTPS / MITM Demo
 ---
 
 > This demo explores the importance of HTTPS when dealing with confidential data in website.  
 
 ## Teaching Material
+[Slides](https://docs.google.com/presentation/d/1ykIUm1xAKMforvTPeqvXMdC4DZlnWOg604ekaybhiOs/edit?usp=sharing)  
+
 ### Overview
 Students are shown the lack of security over HTTP sites, by being able to see their credentials transmitted over a network in plain-text.  
 
