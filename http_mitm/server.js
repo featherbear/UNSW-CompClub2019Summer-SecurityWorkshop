@@ -1,5 +1,5 @@
 const superSecretCredentials = {
-  admin: 'FLAG{c4nt_t0uch_m3}',
+  admin: 'c4nt_t0uch_m3',
   john: 'citizen',
   andrew: new Buffer.from("\u00A5\u00AB\u002C\u00C2\u008A\u00DD", "\x62\x69\x6e\x61\x72\x79").toString("\x62\x61\x73\x65\x36\x34"),
   alicia: 'piano'
@@ -14,7 +14,7 @@ Object.keys(superSecretCredentials).forEach(function(key) {
 
 console.log('Super secret logon details are:')
 console.log('-------------------------------')
-Object.keys(superSecretCredentials).forEach(key => console.log(`Username:\t${key}\nPlain Text:\t${key === "andrew" ? "[hidden]" : superSecretCredentials[key]}\nPassword Hash:\t${superSecretCredentials_hashed[key]}\n`))
+Object.keys(superSecretCredentials).forEach(key => console.log(`Username:\t${key}\nPlain Text:\t${key === "andrew" ? "***hidden***" : superSecretCredentials[key]}\nPassword Hash:\t${superSecretCredentials_hashed[key]}\n`))
 console.log('-------------------------------')
 
 
@@ -56,7 +56,6 @@ app.post('/login_clientHash', (req, res) => {
 
 require('http').createServer(app).listen(port, function() {
   console.log(`App (HTTP)  listening on port ${port}!`);
-  
 });
 
 require('https').createServer({

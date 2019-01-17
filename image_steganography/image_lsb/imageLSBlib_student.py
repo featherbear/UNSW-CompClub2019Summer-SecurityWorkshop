@@ -1,13 +1,5 @@
 from PIL import Image
 
-def extract(source, lsb):
-    pass
-    ## Open the image
-    
-    ## For each pixel, extract the least significant bits
-    
-    ## Store and show the hidden image!
-    
     
 def hide(medium, secret_image, lsb):
     pass
@@ -22,6 +14,14 @@ def hide(medium, secret_image, lsb):
     ## Store and show the special image!
 
 
+def extract(source, lsb):
+    pass
+    ## Open the image
+    
+    ## For each pixel, extract the least significant bits
+    
+    ## Store and show the hidden image!
+    
 
 ##########################################################
 # The stuff below here already written for you!           
