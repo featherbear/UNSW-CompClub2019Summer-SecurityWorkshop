@@ -1,9 +1,7 @@
 <html>
-<script>
-  const httpsPort = 8443;
-</script>
-
 <head>
+  <script type="text/javascript" src="./data.js"></script>
+  <script type="text/javascript">if (location.protocol === 'https:') location = `http://${location.hostname}:${httpPort}${location.pathname}`</script>
   <script type="text/javascript" src="./assets/js/md5.js"></script>
   <link rel="stylesheet" href="./assets/css/normalize.min.css">
   <link rel="stylesheet" href="./assets/css/bulma.min.css">
@@ -30,9 +28,9 @@
             method: "post",
             body: JSON.stringify(data),
             headers: {
-              "Content-Type": "application/json"}
+              "Content-Type": "application/json"
             }
-          )
+          })
            .then(response => response.json())
            .then(response => callback(response))
         }
@@ -90,8 +88,12 @@
                 login("/login_plain", {
                   username: this.username.value,
                   password: this.password.value
-                }, function(response) {
-                  alert(response.status)
+                }, response => {
+                  if (response.status) {
+                    alert(`Hello, ${this.username.value}! You have logged in successfully!`);
+                  } else {
+                    alert('Nope... who are you!?')
+                  }
                 })
               })
             </script>
@@ -124,8 +126,12 @@
                 login("/login_clientHash", {
                   username: this.username.value,
                   password: md5(this.password.value)
-                }, function(response) {
-                  alert(response.status)
+                }, response => {
+                  if (response.status) {
+                    alert(`Hello, ${this.username.value}! You have logged in successfully!`);
+                  } else {
+                    alert('Nope... who are you!?')
+                  }
                 })
               })
             </script>
@@ -135,7 +141,7 @@
                   <p>Notes</p>
                 </div>
                 <div class="accordion-body">
-                  <div class="accordion-content">Hold up! What if we <b>encrypt</b> our password?<br>Therefore no one will be able see what our password was!<br><br><br><i>right...?</i></div>
+                  <div class="accordion-content">Hold up! What if we <b>hash</b> our password?<br>Therefore no one will be able see what our password was!<br><br><br><i>right...?</i></div>
                 </div>
               </article>
             </section>
@@ -158,8 +164,12 @@
                 login("/login_clientHash", {
                   username: this.username.value,
                   password: this.password.value
-                }, function(response) {
-                  alert(response.status)
+                }, response => {
+                  if (response.status) {
+                    alert(`Hello, ${this.username.value}! You have logged in successfully!`);
+                  } else {
+                    alert('Nope... who are you!?')
+                  }
                 })
               })
             </script>
@@ -169,13 +179,13 @@
                   <p>Notes</p>
                 </div>
                 <div class="accordion-body">
-                  <div class="accordion-content">Hold up! What if we <b>encrypt</b> our password?<br>Therefore no one will be able see what our password was!<br><br><br>The issue behind this is that <b>even</b> if we encrypt our password,<br> whilst a <strike>hacker</strike> bad person might not be able to decrypt the password... they won't need to.<br><br>This encrypted password (<i>eg. cGFzc3dvcmQxMjM=</i>) <b>becomes</b> the password</div>
+                  <div class="accordion-content">Hold up! What if we <b>hash</b> our password?<br>Therefore no one will be able see what our password was!<br><br><br>The issue behind this is that <b>even</b> if we hash our password,<br> whilst a <strike>hacker</strike> bad person might not be able to unhash the password... they won't need to.<br><br>This hashed password (<i>eg. 5f4dcc3b5aa765d61d8327deb882cf99</i>) <b>becomes</b> the password</div>
                 </div>
               </article>
             </section>
           </div>
           <div class="step-content has-text-centered">
-            <h1 class="title">Login Four - Hashed login over HTTPS</h1>
+            <h1 class="title">Login Four - Use HTTPS</h1>
             <form id="login_serverHash">
               <div class="field">
                 <div class="label">Username</div>
@@ -192,8 +202,12 @@
                 login(`https://${location.hostname}:${httpsPort}/login_clientHash`, {
                   username: this.username.value,
                   password: md5(this.password.value)
-                }, function(response) {
-                  alert(response.status)
+                }, response => {
+                  if (response.status) {
+                    alert(`Hello, ${this.username.value}! You have logged in successfully!`);
+                  } else {
+                    alert('Nope... who are you!?')
+                  }
                 })
               })
             </script>
@@ -203,7 +217,7 @@
                   <p>Notes</p>
                 </div>
                 <div class="accordion-body">
-                  <div class="accordion-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum <a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.</div>
+                  <div class="accordion-content">The solution???<br><br><b>HTTPS</b>.<br><br>HTTPS packets are encrypted - meaning that no one is able to see the password!</div>
                 </div>
               </article>
             </section>

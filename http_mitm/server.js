@@ -6,8 +6,9 @@ const superSecretCredentials = {
 }
 
 const md5 = require('md5');
-const superSecretCredentials_hashed = {};
+let superSecretCredentials_hashed = {};
 Object.keys(superSecretCredentials).forEach(function(key) {
+    // PSA: If you're ever going to hash your passwords - Please don't use MD5.
     superSecretCredentials_hashed[key] = md5(superSecretCredentials[key]);
   }
 )
@@ -21,12 +22,11 @@ console.log('-------------------------------')
 const fs = require('fs');
 const express = require('express');
 const app = express();
-var cors = require('cors');
-const port = 8000;
-const secure_port = 8443;
+const port = 9000;
+const secure_port = 9443;
 
 app.use(express.static('site'));
-app.use(cors());
+app.use(require('cors')());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -36,6 +36,10 @@ function sendOK(res) {
 function sendNO(res) {
   res.send({status: false})
 }
+
+app.get('/data.js', (req, res) => {
+  res.send(`const httpPort = ${port}, httpsPort = ${secure_port};`);
+});
 
 app.post('/login_plain', (req, res) => {
   let username = req.body.username, password = req.body.password;
@@ -53,14 +57,28 @@ app.post('/login_clientHash', (req, res) => {
   result ? sendOK(res) : sendNO(res);
 });
 
+(function(){
+  let keyFile, certFile;
+  try {
+    keyFile  = fs.readFileSync('./ssl/server.key');
+    certFile = fs.readFileSync('./ssl/server.cert');
+  } catch (e) {
+    console.error("An error has occured");
+    if (e.code == "ENOENT") {
+      console.error("Please create your HTTPS certificate and key");
+    } else {
+      console.error(e);
+    }
+    return;
+  }
+  require('http').createServer(app).listen(port, function() {
+    console.log(`App (HTTP)  listening on port ${port}!`);
+  });
 
-require('http').createServer(app).listen(port, function() {
-  console.log(`App (HTTP)  listening on port ${port}!`);
-});
-
-require('https').createServer({
-  key: fs.readFileSync('./ssl/server.key'),
-  cert: fs.readFileSync('./ssl/server.cert')
-}, app).listen(8443, function(){
-  console.log(`App (HTTPS) listening on port ${secure_port }!`);
-});
+  require('https').createServer({
+    key: keyFile,
+    cert: certFile
+  }, app).listen(secure_port, function(){
+    console.log(`App (HTTPS) listening on port ${secure_port}!`);
+  });
+})();
